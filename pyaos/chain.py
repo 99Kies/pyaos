@@ -7,25 +7,44 @@ class chain(Base):
         super(chain, self).__init__(url)
 
     def get_info(self):
-        # 获取与节点相关的最新信息
+        """
+        获取与节点相关的最新信息
+
+        :return:
+        """
         return self.get("/v1/chain/get_info")
 
     def get_block(self, block_num_or_id):
-        # 获取一个块的信息
+        """
+        获取一个块的信息
+
+        :param block_num_or_id: id值
+        :return:
+        """
         data_dict = {
             "block_num_or_id": block_num_or_id
         }
         return self.post("/v1/chain/get_block", data=data_dict)
 
     def get_account(self, account_name):
-        # 获取账户的信息
+        """
+        获取账户的信息
+
+        :param account_name: 账户名
+        :return:
+        """
         data_dict = {
             "account_name": account_name
         }
         return self.post("/v1/chain/get_account", data=data_dict)
 
     def get_code(self, account_name):
-        # 获取智能合约代码
+        """
+        获取智能合约代码
+
+        :param account_name: 账户名
+        :return:
+        """
         data_dict = {
             "account_name": account_name,
             "code_as_wasm": "true"
@@ -34,9 +53,9 @@ class chain(Base):
 
     def get_table_rows(self, account_details):
         """
-        Fetch smart contract data from an account.
+        从帐户中获取智能合同数据。
 
-        :param account_details: (str) account details, the format
+        :param account_details: (str)帐户详细信息，格式
         must be a string of a json
         :return: response object
         """
@@ -46,10 +65,10 @@ class chain(Base):
 
     def abi_json_to_bin(self, data):
         """
-        Serialize json to binary hex. The resulting binary hex is usually
-        used for the data field in push_transaction.
+        将json序列化为二进制十六进制。生成的二进制十六进制通常是
+        用于push_transaction中的数据字段。
 
-        :param data: (str) the format must be a string of a json
+        :param data: json 字符串
         :return: response object
         """
         path = '/v1/chain/abi_json_to_bin'
@@ -57,9 +76,9 @@ class chain(Base):
 
     def abi_bin_to_json(self, data):
         """
-        Serialize back binary hex to json.
+        将二进制十六进制序列化回json。
 
-        :param data:  (str) the format must be a string of a json
+        :param data: json字符串
         :return:response object
         """
         path = '/v1/chain/abi_bin_to_json'
@@ -67,11 +86,10 @@ class chain(Base):
 
     def push_transaction(self, transaction):
         """
-        This method expects a transaction in JSON format and will
-        attempt to apply it to the blockchain,
+        这个方法期望一个JSON格式的事务，并且将会这样做
+        试着把它应用到区块链上，
 
-        :param transaction: (str) transaction, the format must be a
-        string of a json
+        :param transaction: json字符串
         :return: response object
         """
         path = '/v1/chain/push_transaction'
@@ -79,10 +97,9 @@ class chain(Base):
 
     def push_transactions(self, transactions):
         """
-        This method push multiple transactions at once.
+        此方法一次推送多个事务。
 
-        :param transactions: (str) list of transactions, the format must be a
-        string of a list
+        :param transactions: json字符串
         :return: response object
         """
         path = '/v1/chain/push_transaction'
@@ -90,10 +107,9 @@ class chain(Base):
 
     def get_required_keys(self, transaction_data):
         """
-        Get required keys to sign a transaction from list of your keys.
+        从您的密钥列表中获取签署事务所需的密钥。
 
-        :param transaction_data: (str) transaction data with a list of keys,
-        the format must be a string of a json
+        :param transaction_data: json字符串
         :return: response object
         """
         path = '/v1/chain/get_required_keys'
