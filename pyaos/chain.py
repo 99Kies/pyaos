@@ -32,55 +32,69 @@ class chain(Base):
         }
         return self.post("/v1/chain/get_code", data=data_dict)
 
-    def get_table_rows(self, scope, code, table, lower_bound=None, upper_bound=None, limit=None):
+    def get_table_rows(self, account_details):
+        """
+        Fetch smart contract data from an account.
 
+        :param account_details: (str) account details, the format
+        must be a string of a json
+        :return: response object
+        """
+        path = '/v1/chain/get_table_rows'
 
-        data_dict = {
-            "scope": scope,
-            "code": code,
-            "table": table,
-            "json": "true",
-        }
-        if lower_bound:
-            data_dict["lower_bound"] = lower_bound
-        if upper_bound:
-            data_dict["upper_bound"] = upper_bound
-        if limit:
-            data_dict["limt"] = limit
+        return self.post(path, data=account_details)
 
-        return self.post("/v1/chain/get_table_rows", data=data_dict)
+    def abi_json_to_bin(self, data):
+        """
+        Serialize json to binary hex. The resulting binary hex is usually
+        used for the data field in push_transaction.
 
-    def abi_json_to_bin(self,code, jsonargs):
-        data_dict = {
-            "code": code,
-            "action": "transfer",
-            "args": jsonargs
-        }
-        return self.post("/v1/chain/abi_json_to_bin", data=data_dict)
+        :param data: (str) the format must be a string of a json
+        :return: response object
+        """
+        path = '/v1/chain/abi_json_to_bin'
+        return self.post(path, data=data)
 
-    def abi_bin_to_json(self, code, binargs):
-        data_dict = {
-            "code": code,
-            "action": "transfer",
-            "binargs": binargs
-        }
-        return self.post("/v1/chain/abi_bin_to_json", data=data_dict)
+    def abi_bin_to_json(self, data):
+        """
+        Serialize back binary hex to json.
 
+        :param data:  (str) the format must be a string of a json
+        :return:response object
+        """
+        path = '/v1/chain/abi_bin_to_json'
+        return self.post(path, data=data)
 
-    def push_transactions(self, data_dict):
-        return self.post("/v1/chain/push_transaction", data=data_dict)
+    def push_transaction(self, transaction):
+        """
+        This method expects a transaction in JSON format and will
+        attempt to apply it to the blockchain,
 
+        :param transaction: (str) transaction, the format must be a
+        string of a json
+        :return: response object
+        """
+        path = '/v1/chain/push_transaction'
+        return self.post(path, data=transaction)
 
-    def get_required_keys(self, data_dict):
-        # 获取必需的密钥，从密钥列表中签署交易。
+    def push_transactions(self, transactions):
+        """
+        This method push multiple transactions at once.
 
-        return self.post("/v1/chain/get_required_keys", data=data_dict)
+        :param transactions: (str) list of transactions, the format must be a
+        string of a list
+        :return: response object
+        """
+        path = '/v1/chain/push_transaction'
+        return self.post(path, data=transactions)
 
+    def get_required_keys(self, transaction_data):
+        """
+        Get required keys to sign a transaction from list of your keys.
 
-
-a = chain("https://api.testnet.eos.io")
-
-pprint(a.get_code("cydfginyhfsa"))
-
-# data_dict = [{"ref_block_num":"101","ref_block_prefix":"4159312339","expiration":"2017-09-25T06:28:49","scope":["initb","initc"],"actions":[{"code":"currency","type":"transfer","recipients":["initb","initc"],"authorization":[{"account":"initb","permission":"active"}],"data":"000000000041934b000000008041934be803000000000000"}],"signatures":[],"authorizations":[]}, {"ref_block_num":"101","ref_block_prefix":"4159312339","expiration":"2017-09-25T06:28:49","scope":["inita","initc"],"actions":[{"code":"currency","type":"transfer","recipients":["inita","initc"],"authorization":[{"account":"inita","permission":"active"}],"data":"000000008040934b000000008041934be803000000000000"}],"signatures":[],"authorizations":[]}]
-# pprint(a.push_transactions(data_dict))
+        :param transaction_data: (str) transaction data with a list of keys,
+        the format must be a string of a json
+        :return: response object
+        """
+        path = '/v1/chain/get_required_keys'
+        return self.post(path, data=transaction_data)
