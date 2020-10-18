@@ -1,6 +1,4 @@
-import requests
-from base import Base
-from pprint import pprint
+from .base import Base
 
 class chain(Base):
     def __init__(self, url):
