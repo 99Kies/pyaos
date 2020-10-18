@@ -1,6 +1,6 @@
-# pyaos
+# pyaos 开发文档
 
-## Getting Started
+## 调用Demo
 
 ```python
 from pyaos.chain import chain
@@ -8,3 +8,4 @@ from pyaos.chain import chain
 chain = chain("http://yournode.test")
 print(chain.get_account("youraccount")
 ```
+
