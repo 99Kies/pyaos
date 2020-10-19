@@ -1,9 +1,9 @@
 import hashlib
 import base64
-import sha3
+from _pysha3 import keccak_256
 from ecdsa import SigningKey, SECP256k1
 
-def ecdsa_verifing(verifing_key, signature, data, hashfunc=hashlib.sha256):
+def ecdsa_verifing(signature, data, verifing_key, hashfunc=hashlib.sha256):
     """
     AOS ECDSA 验证签名
     :param verifing_key:
@@ -23,10 +23,14 @@ def ecdsa_sign(data, privkey, hashfunc=hashlib.sha256):
     :param hashfunc:
     :return:
     """
+    if len(privkey) == 66:
+        privkey = privkey[2:]
+    elif privkey != 64:
+        return 0, 0, 0
     signning_key = SigningKey.from_string(bytes.fromhex(privkey), curve=SECP256k1)
     verifing_key = signning_key.get_verifying_key()
     signature = signning_key.sign(data, hashfunc=hashfunc)
-    return data, signature, verifing_key
+    return signature, data, verifing_key
 
 def base64_decode(base_data):
     """
@@ -51,7 +55,9 @@ def Hash(msg):
     AOS Hash加密
     :return:
     """
-    k = sha3.keccak_256()
+    if isinstance(msg, str):
+        msg = bytes(msg, encoding="utf8")
+    k = keccak_256()
     k.update(msg)
     return k.hexdigest()
 
@@ -67,3 +73,5 @@ def list_to_binary(list):
     for i in list:
         bin += bytes([i])
     return bin
+a = Hash(b'hello')
+print(a)

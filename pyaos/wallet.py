@@ -24,14 +24,14 @@ class wallet(Base):
         path = '/v1/wallet/open'
         return self.post(path, data=wallet_name)
 
-    def wallet_lock(self, wallet_name):
+    def wallet_lock_all(self, wallet_name):
         """
         锁上指定名字的钱包
 
         :param wallet_name:(str)待打开钱包的名称
         :return:
         """
-        path = '/v1/wallet/lock'
+        path = '/v1/wallet/lock_all'
         return self.post(path, data=wallet_name)
 
     def wallet_lock_all(self):

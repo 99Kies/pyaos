@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='pyaos',
-    version='0.2',
+    version='1.1',
     authtor=['kies', 'xiaoyue',],
     packages=find_packages(),
     long_description=long_description,
